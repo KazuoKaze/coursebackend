@@ -162,14 +162,46 @@ export const calendlyWebhook: Endpoint = {
 
       // BOOK CANCELLED
       if (eventType === 'invitee.canceled') {
+        const payload = body.payload
+
+        const event = payload.scheduled_event
+
+        const bookings = await req.payload.find({
+          collection: 'session-bookings',
+
+          where: {
+            calendlyEventId: {
+              equals: event.uri,
+            },
+          },
+        })
+
+        const booking = bookings.docs[0]
+
+        if (!booking) {
+          return Response.json({
+            success: true,
+          })
+        }
+
+        // MARK CANCELLED
+        await req.payload.update({
+          collection: 'session-bookings',
+
+          id: booking.id,
+
+          data: {
+            status: 'cancelled',
+          },
+        })
+
         console.log('BOOKING CANCELLED')
 
-        // later:
-        // restore subscription
-        // mark cancelled
-        // email admin/user
+        // LATER:
+        // restore subscription session
+        // send emails
       }
-
+      
       return Response.json({
         success: true,
       })
