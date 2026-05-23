@@ -14,7 +14,7 @@ async function createWebhook() {
     },
 
     body: JSON.stringify({
-      url: 'https://YOUR_BACKEND_URL/api/calendly-webhook',
+      url: 'https://coursebackend-xi.vercel.app/api/calendly-webhook',
 
       events: ['invitee.created', 'invitee.canceled'],
 
