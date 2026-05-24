@@ -79,8 +79,35 @@ export const consumeSubscriptionSession: Endpoint = {
         },
       })
 
+      // CREATE BOOKING
+      const booking = await req.payload.create({
+        collection: 'session-bookings',
+
+        data: {
+          user: req.user.id,
+
+          inviteeName: req.user.name || '',
+
+          inviteeEmail: req.user.email || '',
+
+          bookingSource: 'subscription',
+
+          subscription: subscription.id,
+
+          paymentStatus: 'paid',
+
+          amount: 0,
+
+          bookingDate: new Date().toISOString(),
+
+          status: 'booked',
+        },
+      })
+
       return Response.json({
         success: true,
+
+        booking,
       })
     } catch (error) {
       console.error(error)

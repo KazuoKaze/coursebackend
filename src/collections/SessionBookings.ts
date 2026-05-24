@@ -73,36 +73,36 @@ export const SessionBookings: CollectionConfig = {
 
     {
       name: 'isRescheduled',
-    
+
       type: 'checkbox',
-    
+
       defaultValue: false,
     },
 
     {
       name: 'rescheduledTo',
-    
+
       type: 'text',
     },
 
     {
       name: 'status',
-    
+
       type: 'select',
-    
+
       defaultValue: 'booked',
-    
+
       options: [
         {
           label: 'Booked',
           value: 'booked',
         },
-    
+
         {
           label: 'Cancelled',
           value: 'cancelled',
         },
-    
+
         {
           label: 'Completed',
           value: 'completed',
@@ -122,6 +122,34 @@ export const SessionBookings: CollectionConfig = {
     {
       name: 'sessionNotes',
       type: 'textarea',
+    },
+
+    {
+      name: 'bookingSource',
+
+      type: 'select',
+
+      defaultValue: 'single',
+
+      options: [
+        {
+          label: 'Single Session',
+          value: 'single',
+        },
+
+        {
+          label: 'Subscription',
+          value: 'subscription',
+        },
+      ],
+    },
+
+    {
+      name: 'subscription',
+
+      type: 'relationship',
+
+      relationTo: 'user-subscriptions',
     },
 
     {

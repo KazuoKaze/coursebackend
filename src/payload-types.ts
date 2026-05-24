@@ -636,6 +636,8 @@ export interface SessionBooking {
    */
   bookingDate?: string | null;
   sessionNotes?: string | null;
+  bookingSource?: ('single' | 'subscription') | null;
+  subscription?: (string | null) | UserSubscription;
   paymentStatus?: ('pending' | 'paid' | 'failed') | null;
   amount?: number | null;
   razorpayOrderId?: string | null;
@@ -646,14 +648,22 @@ export interface SessionBooking {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "session-settings".
+ * via the `definition` "user-subscriptions".
  */
-export interface SessionSetting {
+export interface UserSubscription {
   id: string;
-  title?: string | null;
-  sessionPrice: number;
-  currency?: string | null;
-  sessionDuration?: number | null;
+  user: string | User;
+  plan: string | SessionPlan;
+  status?: ('active' | 'expired' | 'cancelled') | null;
+  startDate: string;
+  endDate: string;
+  totalSessions: number;
+  remainingSessions: number;
+  paymentStatus?: ('paid' | 'pending' | 'failed') | null;
+  amount?: number | null;
+  razorpayOrderId?: string | null;
+  razorpayPaymentId?: string | null;
+  razorpaySignature?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -676,22 +686,14 @@ export interface SessionPlan {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "user-subscriptions".
+ * via the `definition` "session-settings".
  */
-export interface UserSubscription {
+export interface SessionSetting {
   id: string;
-  user: string | User;
-  plan: string | SessionPlan;
-  status?: ('active' | 'expired' | 'cancelled') | null;
-  startDate: string;
-  endDate: string;
-  totalSessions: number;
-  remainingSessions: number;
-  paymentStatus?: ('paid' | 'pending' | 'failed') | null;
-  amount?: number | null;
-  razorpayOrderId?: string | null;
-  razorpayPaymentId?: string | null;
-  razorpaySignature?: string | null;
+  title?: string | null;
+  sessionPrice: number;
+  currency?: string | null;
+  sessionDuration?: number | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1180,6 +1182,8 @@ export interface SessionBookingsSelect<T extends boolean = true> {
   status?: T;
   bookingDate?: T;
   sessionNotes?: T;
+  bookingSource?: T;
+  subscription?: T;
   paymentStatus?: T;
   amount?: T;
   razorpayOrderId?: T;
