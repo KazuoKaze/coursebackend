@@ -166,6 +166,10 @@ export const calendlyWebhook: Endpoint = {
 
         const inviteeEmail = payload.email
 
+        console.log('EVENT TYPE:', eventType)
+
+        console.log(JSON.stringify(payload, null, 2))
+
         // Find latest booking for this user
         const bookings = await req.payload.find({
           collection: 'session-bookings',
@@ -262,6 +266,10 @@ export const calendlyWebhook: Endpoint = {
         const payload = body.payload
 
         const event = payload.scheduled_event
+
+        console.log('EVENT TYPE:', eventType)
+
+        console.log(JSON.stringify(payload, null, 2))
 
         const bookings = await req.payload.find({
           collection: 'session-bookings',
