@@ -309,7 +309,7 @@ export const calendlyWebhook: Endpoint = {
           booking.bookingSource === 'subscription' &&
           booking.subscription &&
           booking.status !== 'cancelled'
-        )
+        ) {
           const subscription = await req.payload.findByID({
             collection: 'user-subscriptions',
 
