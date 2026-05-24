@@ -110,15 +110,63 @@ export const calendlyWebhook: Endpoint = {
       const eventType = body.event
 
       // BOOK CREATED
+      // if (eventType === 'invitee.created') {
+      //   const payload = body.payload
+
+      //   const invitee = payload
+
+      //   const event = payload.scheduled_event
+
+      //   const inviteeEmail = invitee.email
+
+      //   const bookings = await req.payload.find({
+      //     collection: 'session-bookings',
+
+      //     where: {
+      //       inviteeEmail: {
+      //         equals: inviteeEmail,
+      //       },
+
+      //       calendlyEventId: {
+      //         equals: event.uri,
+      //       },
+      //     },
+      //   })
+
+      //   const booking = bookings.docs[0]
+
+      //   if (!booking) {
+      //     console.log('Booking not found')
+
+      //     return Response.json({
+      //       success: true,
+      //     })
+      //   }
+
+      //   await req.payload.update({
+      //     collection: 'session-bookings',
+
+      //     id: booking.id,
+
+      //     data: {
+      //       eventName: event.name,
+
+      //       startTime: event.start_time,
+
+      //       endTime: event.end_time,
+
+      //       meetingLink: event.location?.join_url || '',
+      //     },
+      //   })
+      // }
+
+      // BOOK CREATED
       if (eventType === 'invitee.created') {
         const payload = body.payload
 
-        const invitee = payload
+        const inviteeEmail = payload.email
 
-        const event = payload.scheduled_event
-
-        const inviteeEmail = invitee.email
-
+        // Find latest booking for this user
         const bookings = await req.payload.find({
           collection: 'session-bookings',
 
@@ -126,11 +174,11 @@ export const calendlyWebhook: Endpoint = {
             inviteeEmail: {
               equals: inviteeEmail,
             },
-
-            calendlyEventId: {
-              equals: event.uri,
-            },
           },
+
+          sort: '-createdAt',
+
+          limit: 1,
         })
 
         const booking = bookings.docs[0]
@@ -143,22 +191,71 @@ export const calendlyWebhook: Endpoint = {
           })
         }
 
+        console.log('BOOKING FOUND:', booking.id)
+
+        // Update booking with REAL Calendly data
         await req.payload.update({
           collection: 'session-bookings',
 
           id: booking.id,
 
           data: {
-            eventName: event.name,
+            eventName: payload.event_type?.name || '',
 
-            startTime: event.start_time,
+            startTime: payload.scheduled_event?.start_time || null,
 
-            endTime: event.end_time,
+            endTime: payload.scheduled_event?.end_time || null,
 
-            meetingLink: event.location?.join_url || '',
+            meetingLink: payload.scheduled_event?.location?.join_url || '',
+
+            calendlyEventId: payload.scheduled_event?.uri || '',
           },
         })
+
+        console.log('BOOKING UPDATED')
       }
+
+      // BOOK CANCELLED
+      // if (eventType === 'invitee.canceled') {
+      //   const payload = body.payload
+
+      //   const event = payload.scheduled_event
+
+      //   const bookings = await req.payload.find({
+      //     collection: 'session-bookings',
+
+      //     where: {
+      //       calendlyEventId: {
+      //         equals: event.uri,
+      //       },
+      //     },
+      //   })
+
+      //   const booking = bookings.docs[0]
+
+      //   if (!booking) {
+      //     return Response.json({
+      //       success: true,
+      //     })
+      //   }
+
+      //   // MARK CANCELLED
+      //   await req.payload.update({
+      //     collection: 'session-bookings',
+
+      //     id: booking.id,
+
+      //     data: {
+      //       status: 'cancelled',
+      //     },
+      //   })
+
+      //   console.log('BOOKING CANCELLED')
+
+      //   // LATER:
+      //   // restore subscription session
+      //   // send emails
+      // }
 
       // BOOK CANCELLED
       if (eventType === 'invitee.canceled') {
@@ -174,6 +271,8 @@ export const calendlyWebhook: Endpoint = {
               equals: event.uri,
             },
           },
+
+          limit: 1,
         })
 
         const booking = bookings.docs[0]
@@ -184,7 +283,10 @@ export const calendlyWebhook: Endpoint = {
           })
         }
 
-        // MARK CANCELLED
+        // Detect reschedule
+        const isRescheduled = payload.rescheduled === true || !!payload.new_invitee
+
+        // UPDATE BOOKING
         await req.payload.update({
           collection: 'session-bookings',
 
@@ -192,16 +294,45 @@ export const calendlyWebhook: Endpoint = {
 
           data: {
             status: 'cancelled',
+
+            isRescheduled,
+
+            rescheduledTo: payload.new_invitee?.uri || '',
           },
         })
 
-        console.log('BOOKING CANCELLED')
+        console.log(isRescheduled ? 'BOOKING RESCHEDULED' : 'BOOKING CANCELLED')
 
-        // LATER:
-        // restore subscription session
-        // send emails
+        // ONLY restore session if REAL cancellation
+        if (
+          !isRescheduled &&
+          booking.bookingSource === 'subscription' &&
+          booking.subscription &&
+          booking.status !== 'cancelled'
+        )
+          const subscription = await req.payload.findByID({
+            collection: 'user-subscriptions',
+
+            id:
+              typeof booking.subscription === 'object'
+                ? booking.subscription.id
+                : booking.subscription,
+          })
+
+          await req.payload.update({
+            collection: 'user-subscriptions',
+
+            id: subscription.id,
+
+            data: {
+              remainingSessions: subscription.remainingSessions + 1,
+            },
+          })
+
+          console.log('SESSION RESTORED')
+        }
       }
-      
+
       return Response.json({
         success: true,
       })
