@@ -100,7 +100,7 @@ export const consumeSubscriptionSession: Endpoint = {
 
           bookingDate: new Date().toISOString(),
 
-          status: 'booked',
+          status: 'pending',
         },
       })
 

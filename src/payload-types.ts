@@ -628,6 +628,8 @@ export interface SessionBooking {
   endTime?: string | null;
   meetingLink?: string | null;
   calendlyEventId?: string | null;
+  cancelUrl?: string | null;
+  rescheduleUrl?: string | null;
   isRescheduled?: boolean | null;
   rescheduledTo?: string | null;
   status?: ('booked' | 'cancelled' | 'completed') | null;
@@ -1177,6 +1179,8 @@ export interface SessionBookingsSelect<T extends boolean = true> {
   endTime?: T;
   meetingLink?: T;
   calendlyEventId?: T;
+  cancelUrl?: T;
+  rescheduleUrl?: T;
   isRescheduled?: T;
   rescheduledTo?: T;
   status?: T;

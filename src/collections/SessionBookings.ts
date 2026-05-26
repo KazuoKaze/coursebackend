@@ -72,6 +72,18 @@ export const SessionBookings: CollectionConfig = {
     },
 
     {
+      name: 'cancelUrl',
+
+      type: 'text',
+    },
+
+    {
+      name: 'rescheduleUrl',
+
+      type: 'text',
+    },
+
+    {
       name: 'isRescheduled',
 
       type: 'checkbox',
