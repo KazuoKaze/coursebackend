@@ -693,7 +693,14 @@ export interface SessionPlan {
 export interface SessionSetting {
   id: string;
   title?: string | null;
-  sessionPrice: number;
+  /**
+   * Base international session price
+   */
+  sessionBasePrice: number;
+  /**
+   * GST percentage for Indian users
+   */
+  gstPercentage?: number | null;
   currency?: string | null;
   sessionDuration?: number | null;
   updatedAt: string;
@@ -1202,7 +1209,8 @@ export interface SessionBookingsSelect<T extends boolean = true> {
  */
 export interface SessionSettingsSelect<T extends boolean = true> {
   title?: T;
-  sessionPrice?: T;
+  sessionBasePrice?: T;
+  gstPercentage?: T;
   currency?: T;
   sessionDuration?: T;
   updatedAt?: T;

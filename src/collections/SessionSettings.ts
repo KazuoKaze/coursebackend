@@ -19,13 +19,37 @@ export const SessionSettings: CollectionConfig = {
       defaultValue: 'Live Session Settings',
     },
 
+    // {
+    //   name: 'sessionPrice',
+    //   type: 'number',
+
+    //   required: true,
+
+    //   defaultValue: 4999,
+    // },
+
     {
-      name: 'sessionPrice',
+      name: 'sessionBasePrice',
+
       type: 'number',
 
       required: true,
 
-      defaultValue: 4999,
+      admin: {
+        description: 'Base international session price',
+      },
+    },
+
+    {
+      name: 'gstPercentage',
+
+      type: 'number',
+
+      defaultValue: 18,
+
+      admin: {
+        description: 'GST percentage for Indian users',
+      },
     },
 
     {
