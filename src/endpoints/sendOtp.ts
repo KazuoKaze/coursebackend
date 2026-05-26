@@ -58,7 +58,7 @@ export const sendOtp: Endpoint = {
 
       // Send email
       await resend.emails.send({
-        from: 'onboarding@resend.dev',
+        from: 'HD Clarity Speech <hello@mail.hdclarityspeech.com>',
         to: email,
         subject: 'Your Verification Code',
         html: `
