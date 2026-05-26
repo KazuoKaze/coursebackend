@@ -87,7 +87,12 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URL || '',
   }),
-  cors: ['http://localhost:3000', 'http://127.0.0.1:5501', 'https://coursebackend-xi.vercel.app'],
+  cors: [
+    'http://localhost:3000',
+    'http://127.0.0.1:5501',
+    'https://coursebackend-xi.vercel.app',
+    'https://presly-f587b.web.app',
+  ],
   endpoints: [
     sendOtp,
     verifyOtp,
