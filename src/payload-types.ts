@@ -632,7 +632,7 @@ export interface SessionBooking {
   rescheduleUrl?: string | null;
   isRescheduled?: boolean | null;
   rescheduledTo?: string | null;
-  status?: ('booked' | 'cancelled' | 'completed') | null;
+  status?: ('pending' | 'booked' | 'cancelled' | 'completed') | null;
   /**
    * Date when booking was created
    */

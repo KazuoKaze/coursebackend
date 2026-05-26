@@ -106,6 +106,10 @@ export const SessionBookings: CollectionConfig = {
 
       options: [
         {
+          label: 'Pending',
+          value: 'pending',
+        },
+        {
           label: 'Booked',
           value: 'booked',
         },
