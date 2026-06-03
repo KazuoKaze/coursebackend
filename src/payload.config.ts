@@ -41,6 +41,7 @@ import { startConversation } from './endpoints/startConversation'
 import { sendMessage } from './endpoints/sendMessage'
 import { getConversationMessages } from './endpoints/getConversationMessages'
 import { markConversationRead } from './endpoints/markConversationRead'
+import ContactSubmissions from './collections/ContactSubmissions'
 
 
 
@@ -78,6 +79,8 @@ export default buildConfig({
 
     SupportMessages,
     SupportConversations,
+
+    ContactSubmissions,
   ],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || '',
