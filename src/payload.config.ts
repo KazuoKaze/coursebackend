@@ -95,6 +95,7 @@ export default buildConfig({
     'http://127.0.0.1:5501',
     'https://coursebackend-xi.vercel.app',
     'https://presly-f587b.web.app',
+    'https://hdclarityspeech.com',
   ],
   endpoints: [
     sendOtp,
