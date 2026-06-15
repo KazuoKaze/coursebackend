@@ -44,7 +44,9 @@ import { markConversationRead } from './endpoints/markConversationRead'
 import ContactSubmissions from './collections/ContactSubmissions'
 
 
-
+import { sendResetOtp } from './endpoints/sendResetOtp'
+import { verifyResetOtp } from './endpoints/verifyResetOtp'
+import { resetPassword } from './endpoints/resetPassword'
 
 
 const filename = fileURLToPath(import.meta.url)
@@ -115,6 +117,11 @@ export default buildConfig({
     sendMessage,
     getConversationMessages,
     markConversationRead,
+
+    sendResetOtp,
+    verifyResetOtp,
+    resetPassword,
+    
   ],
   sharp,
   plugins: [],

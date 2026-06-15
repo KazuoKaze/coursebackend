@@ -78,6 +78,7 @@ export interface Config {
     'user-subscriptions': UserSubscription;
     'support-messages': SupportMessage;
     'support-conversations': SupportConversation;
+    'contact-submissions': ContactSubmission;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -96,6 +97,7 @@ export interface Config {
     'user-subscriptions': UserSubscriptionsSelect<false> | UserSubscriptionsSelect<true>;
     'support-messages': SupportMessagesSelect<false> | SupportMessagesSelect<true>;
     'support-conversations': SupportConversationsSelect<false> | SupportConversationsSelect<true>;
+    'contact-submissions': ContactSubmissionsSelect<false> | ContactSubmissionsSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -738,6 +740,27 @@ export interface SupportConversation {
   createdAt: string;
 }
 /**
+ * Contact form submissions from the website.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-submissions".
+ */
+export interface ContactSubmission {
+  id: string;
+  fullName: string;
+  email: string;
+  studyType?: ('First' | 'Second' | 'Third' | 'Fourth') | null;
+  message?: string | null;
+  agreedToUpdates?: boolean | null;
+  submittedAt?: string | null;
+  /**
+   * Captured server-side from the request headers.
+   */
+  ipAddress?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
@@ -804,6 +827,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'support-conversations';
         value: string | SupportConversation;
+      } | null)
+    | ({
+        relationTo: 'contact-submissions';
+        value: string | ContactSubmission;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -1278,6 +1305,21 @@ export interface SupportConversationsSelect<T extends boolean = true> {
   lastMessageAt?: T;
   unreadByAdmin?: T;
   unreadByUser?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "contact-submissions_select".
+ */
+export interface ContactSubmissionsSelect<T extends boolean = true> {
+  fullName?: T;
+  email?: T;
+  studyType?: T;
+  message?: T;
+  agreedToUpdates?: T;
+  submittedAt?: T;
+  ipAddress?: T;
   updatedAt?: T;
   createdAt?: T;
 }
