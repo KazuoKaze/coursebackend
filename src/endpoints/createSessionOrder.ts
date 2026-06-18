@@ -21,7 +21,7 @@ export const createSessionOrder: Endpoint = {
 
       const body = await req.json()
 
-      const { inviteeName, inviteeEmail, calendlyEventId, bookingDate } = body
+      const { inviteeName, inviteeEmail, calendlyEventId, bookingDate, indianUser } = body
 
       // Your fixed session price
       // Fetch session settings
@@ -43,7 +43,17 @@ export const createSessionOrder: Endpoint = {
         )
       }
 
-      const sessionPrice = sessionSettings.sessionPrice
+      // const sessionPrice = sessionSettings.sessionBasePrice
+
+      const basePrice = sessionSettings.sessionBasePrice || 0
+
+      const gstPercentage = sessionSettings.gstPercentage || 18
+
+      let sessionPrice = basePrice
+
+      if (indianUser) {
+        sessionPrice = basePrice + (basePrice * gstPercentage) / 100
+      }
 
       // Create Razorpay order
       const razorpayOrder = await razorpay.orders.create({
@@ -65,13 +75,15 @@ export const createSessionOrder: Endpoint = {
 
           inviteeEmail,
 
-          calendlyEventId,
+          calendlyEventId: '',
 
           bookingDate,
 
           amount: sessionPrice,
 
           paymentStatus: 'pending',
+
+          status: 'pending',
 
           razorpayOrderId: razorpayOrder.id,
         },

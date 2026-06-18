@@ -102,7 +102,7 @@ export const SessionBookings: CollectionConfig = {
 
       type: 'select',
 
-      defaultValue: 'booked',
+      defaultValue: 'pending',
 
       options: [
         {
