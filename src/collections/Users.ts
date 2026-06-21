@@ -53,6 +53,11 @@ export const Users: CollectionConfig = {
     },
 
     {
+      name: 'googleId',
+      type: 'text',
+    },
+
+    {
       name: 'purchasedCourses',
       type: 'relationship',
 

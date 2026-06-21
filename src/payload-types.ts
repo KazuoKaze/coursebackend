@@ -146,6 +146,7 @@ export interface User {
   name: string;
   role?: ('student' | 'admin') | null;
   isVerified?: boolean | null;
+  googleId?: string | null;
   /**
    * Courses purchased by the user
    */
@@ -882,6 +883,7 @@ export interface UsersSelect<T extends boolean = true> {
   name?: T;
   role?: T;
   isVerified?: T;
+  googleId?: T;
   purchasedCourses?: T;
   firstSessionDiscountUsed?: T;
   updatedAt?: T;

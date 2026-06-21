@@ -47,6 +47,7 @@ import ContactSubmissions from './collections/ContactSubmissions'
 import { sendResetOtp } from './endpoints/sendResetOtp'
 import { verifyResetOtp } from './endpoints/verifyResetOtp'
 import { resetPassword } from './endpoints/resetPassword'
+import { googleLogin } from './endpoints/googleLogin'
 
 
 const filename = fileURLToPath(import.meta.url)
@@ -121,6 +122,8 @@ export default buildConfig({
     sendResetOtp,
     verifyResetOtp,
     resetPassword,
+
+    googleLogin,
     
   ],
   sharp,
